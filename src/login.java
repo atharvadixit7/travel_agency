@@ -41,13 +41,13 @@ public class login extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Enter User Name");
         jLayeredPane1.add(jLabel1);
-        jLabel1.setBounds(20, 110, 138, 21);
+        jLabel1.setBounds(20, 110, 150, 21);
 
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Enter Password");
         jLayeredPane1.add(jLabel2);
-        jLabel2.setBounds(20, 170, 126, 21);
+        jLabel2.setBounds(20, 170, 140, 21);
 
         n.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         n.setForeground(new java.awt.Color(255, 255, 255));
@@ -142,7 +142,7 @@ public class login extends javax.swing.JFrame {
                     }
                     if (access.equals("agent")) {
                         JOptionPane.showMessageDialog(null, "WELCOME," + access + " " + name + " To The System");
-                        new agentmenu(n.getText()).setVisible(true);
+                        new agentmenu().setVisible(true);
                         closeWindow();
                     }
                 } else {
