@@ -3,11 +3,11 @@ import SQLConnection.SQLConnection;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
-public class login extends javax.swing.JFrame {
+public class Login extends javax.swing.JFrame {
 
     static Connection conn = null;
 
-    public login() {
+    public Login() {
         initComponents();
         conn = SQLConnection.connect();
     }
@@ -17,7 +17,7 @@ public class login extends javax.swing.JFrame {
             conn.close();
             this.dispose();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, "Excetpion caught in closing Connection" + e.getMessage());
+            JOptionPane.showMessageDialog(rootPane, "Exception caught in closing Connection" + e.getMessage());
         }
     }
 
@@ -132,21 +132,22 @@ public class login extends javax.swing.JFrame {
                 Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 String query = "select * from login where username='" + name + "' and password='" + pass + "';";
                 ResultSet rs = stmt.executeQuery(query);
-                rs.first();
-                String access = rs.getString("AccessType");
+
                 if (rs.first()) {
+                    rs.first();
+                    String access = rs.getString("AccessType");
                     if (access.equals("admin")) {
-                        JOptionPane.showMessageDialog(null, "welcome," + access + " " + name + " to the system");
-                        new adminmenu().setVisible(true);
+                        JOptionPane.showMessageDialog(null, "Welcome, " + name + " to the system");
+                        new AdminMenu().setVisible(true);
                         closeWindow();
                     }
                     if (access.equals("agent")) {
-                        JOptionPane.showMessageDialog(null, "WELCOME," + access + " " + name + " To The System");
-                        new agentmenu().setVisible(true);
+                        JOptionPane.showMessageDialog(null, "Welcome, " + name + " to the system");
+                        new AgentMenu().setVisible(true);
                         closeWindow();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, " please! check your userid and password");
+                    JOptionPane.showMessageDialog(null, "Either username or password incorrect, Try Again!");
                 }
                 rs.close();
                 stmt.close();
@@ -163,7 +164,7 @@ public class login extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new login().setVisible(true);
+                new Login().setVisible(true);
             }
         });
     }
