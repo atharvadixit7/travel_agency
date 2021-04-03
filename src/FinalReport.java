@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
  */
 public class FinalReport extends javax.swing.JFrame {
 
-    String pid, passid;
+    String packid, passid;
     double p;
 
     /**
@@ -29,9 +29,9 @@ public class FinalReport extends javax.swing.JFrame {
         initComponents();
     }
 
-    public FinalReport(double cp, String cpid, String cpassid) {
+    public FinalReport(double cp, String cpackid, String cpassid) {
         initComponents();
-        pid = cpid;
+        packid = cpackid;
         passid = cpassid;
         p = cp;
 
@@ -144,7 +144,7 @@ public class FinalReport extends javax.swing.JFrame {
             String email = rs.getString("email");
             int nop = rs.getInt("nop");
             rs.close();
-            String query1 = "select * from package where pid='" + pid + "'";
+            String query1 = "select * from package where packid='" + packid + "'";
             ResultSet rs1 = stmt.executeQuery(query1);
             rs1.first();
             double d = 0.00;
@@ -165,14 +165,14 @@ public class FinalReport extends javax.swing.JFrame {
             String query2 = "update passenger set tc=" + total1 + " where passid='" + passid + "'";
             stmt.executeUpdate(query2);
             double b = total1 * p * 0.01;
-            String query3 = "select * from tincharge where city ='" + dplace + "' order by passno";
+            String query3 = "select * from travelincharge where operationalcity ='" + dplace + "' order by passno";
             ResultSet rs2 = stmt.executeQuery(query3);
             rs2.first();
             String inid = rs2.getString("inid");
             String inname = rs2.getString("inname");
             String inmno = rs2.getString("mobno");
             rs2.close();
-            String query4 = "update tincharge set passno=passno+1 where inname ='" + inname + "'";
+            String query4 = "update travelincharge set passno=passno+1 where inname ='" + inname + "'";
             String query5 = "update passenger set inid='" + inid + " 'where passid='" + passid + "'";
             stmt.executeUpdate(query4);
             stmt.executeUpdate(query5);

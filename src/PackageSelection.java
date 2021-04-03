@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
  */
 public class PackageSelection extends javax.swing.JFrame {
 
-    String pid;
+    String packid;
 
     /**
      * Creates new form Package_selection
@@ -99,7 +99,8 @@ public class PackageSelection extends javax.swing.JFrame {
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jSeparator1.setBorder(javax.swing.BorderFactory.createMatteBorder(10, 10, 10, 10, new java.awt.Color(0, 0, 0)));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select Package" }));
+        jComboBox1.setToolTipText("Select Package using dropdown");
+        jComboBox1.setName("Select Package"); // NOI18N
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -144,10 +145,10 @@ public class PackageSelection extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGap(64, 64, 64)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(123, 123, 123))
+                            .addContainerGap())
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jScrollPane1)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(72, 72, 72)
                         .addComponent(jButton5)
@@ -210,16 +211,16 @@ public class PackageSelection extends javax.swing.JFrame {
             String query = "select * from package where pname='" + pname + "'";
             ResultSet rs = stmt.executeQuery(query);
             rs.first();
-            pid = rs.getString("pid");
-            String bplace = rs.getString("bp");
-            String dplace = rs.getString("dp");
-            String fdt = rs.getString("fd");
-            String tdt = rs.getString("td");
-            String nod = rs.getString("nod");
-            int ppp = Integer.parseInt(rs.getString("price_perp"));
-            ta.setText("                        PACKAGE DETAIL " + "\n\n" + "PACKAGE ID-:" + pid + "\n" + "PACKAGE NAME-:" + pname + "\n" + "BOARDING -:" + bplace + "\n" + "DESTINATION -:" + dplace + "\n" + "FROM DATE -:" + fdt + "\nTO DATE -:" + tdt + "\n" + "PRICE -: ₹" + ppp);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+            packid = rs.getString("packid");
+            String bplace = rs.getString("bplace");
+            String dplace = rs.getString("dplace");
+            String fromdate = rs.getString("fromdate");
+            String todate = rs.getString("todate");
+            String noofdays = rs.getString("noofdays");
+            int priceperperson = Integer.parseInt(rs.getString("priceperperson"));
+            ta.setText("                        PACKAGE DETAIL " + "\n\n" + "PACKAGE ID-:" + packid + "\n" + "PACKAGE NAME-:" + pname + "\n" + "BOARDING -:" + bplace + "\n" + "DESTINATION -:" + dplace + "\n" + "FROM DATE -:" + fromdate + "\nTO DATE -:" + todate + "\n" + "PRICE -: ₹" + priceperperson);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
@@ -227,40 +228,53 @@ public class PackageSelection extends javax.swing.JFrame {
         try {
             Connection conn = SQLConnection.connect();
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select pname from package where p_id not in('TH001','HW001','GB007','FR001')";
+            String query = "select pname from package";
             ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                String pname = rs.getString("pname");
-                jComboBox1.addItem(pname);
+            if (rs.next() == false) {
+                jButton1.setEnabled(false);
+                jButton2.setEnabled(false);
+                jButton3.setEnabled(false);
+                jButton4.setEnabled(false);
+                JOptionPane.showMessageDialog(rootPane, "No packages to show!", "Empty Package List", JOptionPane.WARNING_MESSAGE);
+            } else {
+                rs.first();
+                do {
+                    String pname = rs.getString("pname");
+                    jComboBox1.addItem(pname);
+                } while (rs.next());
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage());
         }
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         this.dispose();
-        new PassengerDetails(pid).setVisible(true);
+        new PassengerDetails(packid).setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void button_package(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_package
         String ac = evt.getActionCommand();
-        pid = ac;
+        packid = ac;
         try {
             Connection conn = SQLConnection.connect();
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select * from package where pid='" + ac + "'";
+            String query = "select * from package where packid='" + ac + "'";
             ResultSet rs = stmt.executeQuery(query);
-            rs.first();
-            String pname = rs.getString("pname");
-            String bplace = rs.getString("bp");
-            String dplace = rs.getString("dp");
-            String fdt = rs.getString("fd");
-            String tdt = rs.getString("td");
-            String nod = rs.getString("nod");
-            int ppp = Integer.parseInt(rs.getString("price_perp"));
-            ta.setText("                        PACKAGE DETAIL " + "\n\n" + "PACKAGE ID-:" + ac + "\n" + "PACKAGE NAME-:" + pname + "\n" + "BOARDING -:" + bplace + "\n" + "DESTINATION -:" + dplace + "\n" + "FROM DATE -:" + fdt + "\nTO DATE -:" + tdt + "\n" + "PRICE -:" + ppp);
-
+            rs.last();
+            if (rs.getRow() != 0) {
+                rs.first();
+                String pname = rs.getString("pname");
+                String bplace = rs.getString("bplace");
+                String dplace = rs.getString("dplace");
+                String fromdate = rs.getString("fromdate");
+                String todate = rs.getString("todate");
+                String noofdays = rs.getString("noofdays");
+                int priceperperson = Integer.parseInt(rs.getString("priceperperson"));
+                ta.setText("                        PACKAGE DETAIL " + "\n\n" + "PACKAGE ID-:" + ac + "\n" + "PACKAGE NAME-:" + pname + "\n" + "BOARDING -:" + bplace + "\n" + "DESTINATION -:" + dplace + "\n" + "FROM DATE -:" + fromdate + "\nTO DATE -:" + todate + "\n" + "PRICE -:" + priceperperson);
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "This Package does not exist", "Package Not Found", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }

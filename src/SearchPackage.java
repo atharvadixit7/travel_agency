@@ -116,14 +116,14 @@ public class SearchPackage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String pid = tf1.getText();
+        String packid = tf1.getText();
         try {
             Connection conn = SQLConnection.connect();
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select * from  package where pid='" + pid + "'";
+            String query = "select * from  package where packid='" + packid + "'";
             ResultSet rs = stmt.executeQuery(query);
             rs.next();
-            String p_id = rs.getString("pid");
+            String p_id = rs.getString("packid");
             String pname = rs.getString("pname");
             String days = rs.getString("nod");
             String maxperson = rs.getString("mnop");

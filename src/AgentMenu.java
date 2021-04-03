@@ -297,8 +297,8 @@ public void repeatDialog() {
                     String passname = rs.getString("passname");
                     String bplace = rs.getString("bplace");
                     String dplace = rs.getString("dplace");
-                    String pkgid = rs.getString("pkgid");
-                    String pkgname = rs.getString("pkgname");
+                    String packid = rs.getString("packid");
+                    String packname = rs.getString("packname");
                     String fdt = rs.getString("fdt");
                     String tdt = rs.getString("tdt");
                     String aadharno = rs.getString("aadharno");
@@ -309,13 +309,13 @@ public void repeatDialog() {
                     String inid = rs.getString("inid");
                     double tc = rs.getDouble("tc");
                     rs.close();
-                    String query1 = "select * from tincharge where city ='" + dplace + "' order by passno";
+                    String query1 = "select * from travelincharge where operationalcity ='" + dplace + "' order by passno";
                     ResultSet rs1 = stmt.executeQuery(query1);
                     rs1.first();
                     String inname = rs1.getString("inname");
                     String inmno = rs1.getString("mobno");
                     rs1.close();
-                    ta1.append("                        PASSENGER DETAIL " + "\n\n" + "PASSENGER ID-: " + passid + "\n" + "PASSENGER NAME-: " + passname + "\n" + "BOARDING -: " + bplace + "\n" + "DESTINATION -: " + dplace + "\n" + "PACKAGE ID -:" + pkgid + "\n" + " PACKAGE NAME -: " + pkgname + "\n" + "FROM DATE -: " + fdt + "      TO DATE -: " + tdt + "\n" + "AADHAR NO. -: " + aadharno + "\n" + "PASSPORT NO. -: " + ppno + "\n" + "MEMBERSHIP GRADE -:" + mship + "\n" + "MOBILE NO. -:" + mno + "\n" + "EMAIL -: " + email + "\n" + "TRAVEL INCHARGE NAME -:" + inname + "\n" + "TRAVEL INCHARGE ID -: " + inid + "\n" + "INCHARGE MOBILE NO.-: " + inmno + "\n" + "TOTAL COST -: " + tc);
+                    ta1.append("                        PASSENGER DETAIL " + "\n\n" + "PASSENGER ID-: " + passid + "\n" + "PASSENGER NAME-: " + passname + "\n" + "BOARDING -: " + bplace + "\n" + "DESTINATION -: " + dplace + "\n" + "PACKAGE ID -:" + packid + "\n" + " PACKAGE NAME -: " + packname + "\n" + "FROM DATE -: " + fdt + "      TO DATE -: " + tdt + "\n" + "AADHAR NO. -: " + aadharno + "\n" + "PASSPORT NO. -: " + ppno + "\n" + "MEMBERSHIP GRADE -:" + mship + "\n" + "MOBILE NO. -:" + mno + "\n" + "EMAIL -: " + email + "\n" + "TRAVEL INCHARGE NAME -:" + inname + "\n" + "TRAVEL INCHARGE ID -: " + inid + "\n" + "INCHARGE MOBILE NO.-: " + inmno + "\n" + "TOTAL COST -: " + tc);
                 } else {
                     int a = JOptionPane.showConfirmDialog(this, "THIS ID DOES NOT EXIST . WILL YOU LIKE TO TRY AGAIN?", "", 0, JOptionPane.PLAIN_MESSAGE);
                     if (a == 0) {
@@ -355,7 +355,7 @@ public void repeatDialog() {
                     JOptionPane.showMessageDialog(this, "RETURN THE TOTAL COST OF PACKAGE " + tc);
                     String query1 = "delete from passenger where passid ='" + tid + "';";
                     stmt.executeUpdate(query1);
-                    String query2 = "update tincharge set passno=passno-1 where inid='" + inid + "'";
+                    String query2 = "update travelincharge set passno=passno-1 where inid='" + inid + "'";
                     stmt.executeUpdate(query2);
                     JOptionPane.showMessageDialog(this, "THE TOUR HAS DEARLY CANCELLED. HAVE  A NICE DAY.");
                 } else {

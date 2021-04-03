@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
  */
 public class PassengerDetails extends javax.swing.JFrame {
 
-    String pid;
+    String packid;
 
     /**
      * Creates new form Passenger_Details
@@ -30,20 +30,20 @@ public class PassengerDetails extends javax.swing.JFrame {
 
     public PassengerDetails(String p) {
         initComponents();
-        pid = p;
+        packid = p;
         try {
             Connection conn = SQLConnection.connect();
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select * from package where pid='" + pid + "'";
+            String query = "select * from package where packid='" + packid + "'";
             ResultSet rs = stmt.executeQuery(query);
             rs.first();
-            jTextField1.setText(rs.getString("pid"));
+            jTextField1.setText(rs.getString("packid"));
             jTextField2.setText(rs.getString("pname"));
-            jTextField3.setText(rs.getString("bp"));
-            jTextField4.setText(rs.getString("dp"));
-            jTextField5.setText(rs.getString("nod"));
-            jTextField6.setText(rs.getString("mnop"));
-            jTextField14.setText(rs.getString("price_perp"));
+            jTextField3.setText(rs.getString("bplace"));
+            jTextField4.setText(rs.getString("dplace"));
+            jTextField5.setText(rs.getString("noofdays"));
+            jTextField6.setText(rs.getString("maxnoofperson"));
+            jTextField14.setText(rs.getString("priceperperson"));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
@@ -106,7 +106,7 @@ public class PassengerDetails extends javax.swing.JFrame {
         jRadioButton4 = new javax.swing.JRadioButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        clearButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -367,10 +367,10 @@ public class PassengerDetails extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("CLEAR");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        clearButton.setText("CLEAR");
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                clearButtonActionPerformed(evt);
             }
         });
 
@@ -386,7 +386,7 @@ public class PassengerDetails extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addGap(27, 27, 27)
-                        .addComponent(jButton3)
+                        .addComponent(clearButton)
                         .addGap(18, 18, 18)
                         .addComponent(jButton2)))
                 .addContainerGap())
@@ -401,24 +401,13 @@ public class PassengerDetails extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton3)
+                    .addComponent(clearButton)
                     .addComponent(jButton2))
                 .addGap(52, 52, 52))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        jTextField1.setEditable(false);
-        jTextField2.setEditable(false);
-        jTextField3.setEditable(false);
-        jTextField4.setEditable(false);
-        jTextField5.setEditable(false);
-        jTextField6.setEditable(false);
-        jTextField14.setEditable(false);
-        jTextField7.setEditable(false);
-    }//GEN-LAST:event_formWindowActivated
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String passid = jTextField7.getText();
@@ -455,13 +444,13 @@ public class PassengerDetails extends javax.swing.JFrame {
                 mship = "SILVER";
             }
             if (days <= nod && days > 0) {
-                String query = "insert into passenger values('" + passid + "','" + passname + "','" + bplace + "','" + dplace + "','" + pid + "','" + pkgname + "','" + fdt + "','" + tdt + "'," + aadharno + ",'" + passportno + "','" + mship + "'," + mobno + "," + nop + ",'" + emailid + "','IN',0.00)";
+                String query = "insert into passenger values('" + passname + "','" + bplace + "','" + dplace + "','" + packid + "','" + pkgname + "','" + fdt + "','" + tdt + "'," + aadharno + ",'" + passportno + "','" + mship + "'," + mobno + "," + nop + ",'" + emailid + "')";
                 stmt.executeUpdate(query);
                 int a = JOptionPane.showConfirmDialog(this, "DO YOU WANT TO PROCEED", "PROCEED CONFIRMATION", 0, JOptionPane.PLAIN_MESSAGE);
                 if (a == 0) {
                     this.dispose();
-                    passid = jTextField7.getText();
-                    new Booking(bplace, dplace, pid, passid).setVisible(true);
+
+                    new Booking(bplace, dplace, packid, passid).setVisible(true);
                 }
             } else if (days <= 0) {
                 JOptionPane.showMessageDialog(null, "Start and end date cannot be same or end date cannot be small");
@@ -517,8 +506,7 @@ public class PassengerDetails extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        jTextField7.setText("");
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         jTextField8.setText("");
         jTextField9.setText("");
         jTextField10.setText("");
@@ -532,29 +520,39 @@ public class PassengerDetails extends javax.swing.JFrame {
         y1.setSelectedIndex(0);
         y2.setSelectedIndex(0);
         jTextField13.setText("");
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_clearButtonActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         jRadioButton3.setSelected(true);
+        jTextField1.setEditable(false);
+        jTextField2.setEditable(false);
+        jTextField3.setEditable(false);
+        jTextField4.setEditable(false);
+        jTextField5.setEditable(false);
+        jTextField6.setEditable(false);
+        jTextField14.setEditable(false);
+        jTextField7.setEditable(false);
         try {
             Connection conn = SQLConnection.connect();
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select passid from passenger";
-            ResultSet rs = stmt.executeQuery(query);
-            if (rs.next() == false) {
-                jTextField7.setText("P1");
-            } else {
-                rs.beforeFirst();
-                int count = 1;
-                while (rs.next()) {
-                    count++;
-                }
-                jTextField7.setText("P" + count);
+            ResultSet rs = stmt.executeQuery("select * from passenger");
+            rs.last();
+            if (rs.getRow() == 0) {
+                jTextField7.setText(String.format("%d", 1));
+            } else if (rs.getRow() > 0) {
+                jTextField7.setText(String.format("%d", Integer.parseInt(rs.getString("passid")) + 1));
             }
+            rs.close();
+            stmt.close();
+            conn.close();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(rootPane, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_formWindowOpened
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments
@@ -569,11 +567,11 @@ public class PassengerDetails extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton clearButton;
     private javax.swing.JComboBox d1;
     private javax.swing.JComboBox d2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

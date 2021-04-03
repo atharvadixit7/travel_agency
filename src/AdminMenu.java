@@ -7,7 +7,7 @@ import javax.swing.table.DefaultTableModel;
 public class AdminMenu extends javax.swing.JFrame {
 
     /**
-     * Creates new form mainmenu
+     * Creates new form AdminMenu
      */
     static Connection conn = null;
 
@@ -62,8 +62,10 @@ public class AdminMenu extends javax.swing.JFrame {
         View_All = new javax.swing.JMenuItem();
         Log_Out = new javax.swing.JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setName("menu"); // NOI18N
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -301,28 +303,28 @@ public class AdminMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_AgentActionPerformed
 
     public void repeatDialog() {
-        String inid = JOptionPane.showInputDialog(rootPane, "Enter Incharge ID:-", "Get Detail...", -1);
+        String inchargeid = JOptionPane.showInputDialog(rootPane, "Enter Incharge ID:-", "Get Detail...", -1);
         ta1.setText("");
-        if (inid == null) {
+        if (inchargeid == null) {
             int a = JOptionPane.showConfirmDialog(this, "Incharge ID IS COMPULSORY .DO YO WANT TO RETRY?", "", 0, JOptionPane.PLAIN_MESSAGE);
             if (a == 0) {
                 repeatDialog();
             }
         }
-        inid.trim();
-        if (!(inid.equals(""))) {
+        inchargeid.trim();
+        if (!(inchargeid.equals(""))) {
             try {
                 Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                String query = "select * from tincharge where inid='" + inid + "';";
+                String query = "select * from travelincharge where inchargeid='" + inchargeid + "';";
                 ResultSet rs = stmt.executeQuery(query);
                 if (rs.first()) {
                     rs.first();
                     jLayeredPane2.setVisible(true);
-                    String inname = rs.getString("inname");
-                    String inmno = rs.getString("mobno");
-                    String city = rs.getString("city");
+                    String inchargename = rs.getString("inchargename");
+                    String inchargecontact = rs.getString("mobno");
+                    String operationalcity = rs.getString("operationalcity");
                     int passno = rs.getInt("passno");
-                    ta1.append("                        TRAVEL INCHARGE DETAIL " + "\n\n" + "TRAVEL INCHARGE NAME -:" + inname + "\n" + "TRAVEL INCHARGE ID -: " + inid + "\n" + "INCHARGE MOBILE NO.-: " + inmno + "\n" + "CITY INCHARGE IS ASSIGNED -: " + city + "\n" + "PASSENGER ASSIGNED -: " + passno);
+                    ta1.append("                        TRAVEL INCHARGE DETAIL " + "\n\n" + "TRAVEL INCHARGE NAME -:" + inchargename + "\n" + "TRAVEL INCHARGE ID -: " + inchargeid + "\n" + "INCHARGE MOBILE NO.-: " + inchargecontact + "\n" + "CITY INCHARGE IS ASSIGNED -: " + operationalcity + "\n" + "PASSENGER ASSIGNED -: " + passno);
                 } else {
                     int a = JOptionPane.showConfirmDialog(this, "THIS ID DOES NOT EXIST . WILL YOU LIKE TO TRY AGAIN?", "", 0, JOptionPane.PLAIN_MESSAGE);
                     if (a == 0) {
@@ -348,7 +350,7 @@ public class AdminMenu extends javax.swing.JFrame {
         jPanel1.setVisible(true);
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select * from tincharge";
+            String query = "select * from travelincharge";
             ResultSet rs = stmt.executeQuery(query);
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             int rows = rs.getRow();
@@ -357,12 +359,12 @@ public class AdminMenu extends javax.swing.JFrame {
                 model.removeRow(0);
             }
             while (rs.next()) {
-                String inname = rs.getString("inname");
+                String inchargename = rs.getString("inchargename");
                 String phoneno = rs.getString("mobno");
-                String city = rs.getString("city");
-                String inid = rs.getString("inid");
+                String operationalcity = rs.getString("operationalcity");
+                String inchargeid = rs.getString("inchargeid");
                 int passno = rs.getInt("passno");
-                model.addRow(new Object[]{inid, inname, phoneno, city, passno});
+                model.addRow(new Object[]{inchargeid, inchargename, phoneno, operationalcity, passno});
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);

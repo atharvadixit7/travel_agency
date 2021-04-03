@@ -168,7 +168,7 @@ public class AddIncharge extends javax.swing.JFrame {
             String query = "select * from package";
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                String dp = rs.getString("dp");
+                String dp = rs.getString("dplace");
                 jComboBox1.addItem(dp);
             }
         } catch (Exception e) {
@@ -177,32 +177,27 @@ public class AddIncharge extends javax.swing.JFrame {
         try {
             Connection conn = SQLConnection.connect();
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select inid from tincharge";
+            String query = "select inchargeid from travelincharge";
             ResultSet rs = stmt.executeQuery(query);
-            if (rs.next() == false) {
-                jTextField1.setText("IN1");
-            } else {
-                rs.beforeFirst();
-                int count = 1;
-                while (rs.next()) {
-                    count++;
-                }
-                jTextField1.setText("IN" + count);
-            }
+            rs.last();
+            jTextField1.setText(String.format("IN-%04d", rs.getRow() + 1));
+            rs.close();
+            stmt.close();
+            conn.close();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String inid = jTextField1.getText();
-        String inname = jTextField2.getText();
-        long mobno = Long.parseLong(jTextField3.getText());
-        String city = jComboBox1.getSelectedItem().toString();
+        String inchargeid = jTextField1.getText();
+        String inchargename = jTextField2.getText();
+        long inchargecontact = Long.parseLong(jTextField3.getText());
+        String operationalcity = jComboBox1.getSelectedItem().toString();
         try {
             Connection conn = SQLConnection.connect();
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "insert into tincharge values('" + inid + "','" + inname + "'," + mobno + ",'" + city + "')";
+            String query = "insert into travelincharge values('" + inchargeid + "','" + inchargename + "'," + inchargecontact + ",'" + operationalcity + "')";
             int count = stmt.executeUpdate(query);
             if (count > 0) {
                 JOptionPane.showMessageDialog(null, "INCHARGE SUCCESSFULLY ADDED TO DATABASE");
@@ -225,7 +220,7 @@ public class AddIncharge extends javax.swing.JFrame {
         try {
             Connection conn = SQLConnection.connect();
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select inid from tincharge";
+            String query = "select inchargeid from travelincharge";
             ResultSet rs = stmt.executeQuery(query);
             if (rs.next() == false) {
                 jTextField1.setText("IN1");

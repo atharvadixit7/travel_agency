@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
 public class Booking extends javax.swing.JFrame {
 
     double p = 0.00;
-    String pid, passid;
+    String packid, passid;
 
     /**
      * Creates new form booking
@@ -30,9 +30,9 @@ public class Booking extends javax.swing.JFrame {
 
     }
 
-    public Booking(String bplace, String dplace, String cpid, String cpassid) {
+    public Booking(String bplace, String dplace, String cpackid, String cpassid) {
         initComponents();
-        pid = cpid;
+        packid = cpackid;
         passid = cpassid;
 
         tx4.setText(dplace);
@@ -439,7 +439,7 @@ public class Booking extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e);
         }
         this.dispose();
-        new FinalReport(p, pid, passid).setVisible(true);
+        new FinalReport(p, packid, passid).setVisible(true);
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
